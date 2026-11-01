@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Daily Devotions - November 2026</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter & Playfair Display -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #2c221e;
+        }
+        .serif-font {
+            font-family: 'Playfair Display', serif;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        /* Scroll-like parchment styling */
+        .parchment-bg {
+            background-color: #f7f1e5;
+            background-image: radial-gradient(circle at 50% 50%, rgba(243, 233, 215, 0.6) 0%, rgba(228, 213, 187, 0.4) 100%);
+            border: 2px solid #d4b595;
+            box-shadow: inset 0 0 30px rgba(139, 94, 60, 0.08);
+        }
+    </style>
+</head>
+<body class="h-full flex items-center justify-center bg-[#2c221e] text-slate-100 overflow-hidden">
+
+    <!-- Mobile Frame Container -->
+    <div id="app-container" class="w-full h-full sm:w-[420px] sm:h-[880px] sm:max-h-[92vh] sm:rounded-[40px] sm:shadow-2xl sm:border-[8px] sm:border-[#3d2e27] parchment-bg text-[#3b2b22] flex flex-col relative overflow-hidden transition-all duration-300">
+
+        <!-- Top Status / Header Bar -->
+        <header id="app-header" class="bg-[#5c4033] text-[#f7f1e5] px-5 pt-4 pb-3 flex items-center justify-between shadow-md z-20 flex-shrink-0 border-b-2 border-[#8b5e3c]">
+            <div class="flex items-center space-x-2">
+                <div id="header-logo-bg" class="w-8 h-8 rounded-full bg-[#8b5e3c] flex items-center justify-center text-[#f7f1e5] font-serif font-bold text-lg shadow border border-[#d4b595]/40">
+                    D
+                </div>
+                <div>
+                    <h1 class="font-serif font-bold text-lg leading-tight tracking-wide">Daily Devotions</h1>
+                    <p class="text-[11px] text-[#d4b595] uppercase tracking-widest">November 2026 Scroll</p>
+                </div>
+            </div>
+
+            <!-- Version Switcher -->
+            <div class="flex items-center space-x-2">
+                <button onclick="openVersionModal()" id="version-btn" class="bg-[#4a3328] hover:bg-[#3d2e27] text-xs px-2.5 py-1.5 rounded-full border border-[#d4b595]/40 flex items-center space-x-1.5 transition shadow-sm text-[#f7f1e5]">
+                    <i class="fa-solid fa-book-bible text-[#d4b595]"></i>
+                    <span id="current-version-label" class="font-medium">NIV</span>
+                    <i class="fa-solid fa-chevron-down text-[10px] text-[#d4b595]/70"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content Area (Scrollable) -->
+        <main id="main-content" class="flex-1 overflow-y-auto no-scrollbar relative bg-transparent pb-24">
+            <!-- Views injected dynamically -->
+        </main>
+
+        <!-- Bottom Navigation Bar -->
+        <nav id="app-nav" class="absolute bottom-0 left-0 right-0 bg-[#f7f1e5]/95 backdrop-blur-md border-t-2 border-[#d4b595] px-4 py-2.5 flex justify-around items-center z-30 shadow-lg transition-colors duration-300">
+            <button onclick="switchTab('home')" id="nav-home" class="nav-btn flex flex-col items-center text-[#5c4033] transition">
+                <i class="fa-solid fa-house text-lg mb-0.5"></i>
+                <span class="text-[10px] font-semibold">Home</span>
+            </button>
+            <button onclick="switchTab('devotion')" id="nav-devotion" class="nav-btn flex flex-col items-center text-[#8c7355] hover:text-[#5c4033] transition">
+                <i class="fa-solid fa-book-open text-lg mb-0.5"></i>
+                <span class="text-[10px] font-semibold">Reading</span>
+            </button>
+            <button onclick="switchTab('calendar')" id="nav-calendar" class="nav-btn flex flex-col items-center text-[#8c7355] hover:text-[#5c4033] transition">
+                <i class="fa-solid fa-calendar-days text-lg mb-0.5"></i>
+                <span class="text-[10px] font-semibold">Calendar</span>
+            </button>
+            <button onclick="switchTab('notes')" id="nav-notes" class="nav-btn flex flex-col items-center text-[#8c7355] hover:text-[#5c4033] transition">
+                <i class="fa-solid fa-pen-nib text-lg mb-0.5"></i>
+                <span class="text-[10px] font-semibold">Journal</span>
+            </button>
+            <button onclick="switchTab('settings')" id="nav-settings" class="nav-btn flex flex-col items-center text-[#8c7355] hover:text-[#5c4033] transition">
+                <i class="fa-solid fa-gear text-lg mb-0.5"></i>
+                <span class="text-[10px] font-semibold">Settings</span>
+            </button>
+        </nav>
+
+        <!-- Version Picker Modal -->
+        <div id="version-modal" class="fixed inset-0 bg-[#2c221e]/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden animate-fadeIn">
+            <div class="bg-[#f7f1e5] rounded-2xl w-full max-w-xs p-6 shadow-2xl border-2 border-[#d4b595] text-[#3b2b22]">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-serif font-bold text-lg">Select Bible Version</h3>
+                    <button onclick="closeVersionModal()" class="text-[#8c7355] hover:text-[#3b2b22]"><i class="fa-solid fa-xmark text-lg"></i></button>
+                </div>
+                <div class="space-y-2.5">
+                    <button onclick="setVersion('NIV')" class="version-option-btn w-full p-3 rounded-xl border border-[#d4b595] text-left flex items-center justify-between transition hover:border-[#5c4033] hover:bg-[#efe6d5]">
+                        <div>
+                            <p class="font-bold text-sm">New International Version (NIV)</p>
+                            <p class="text-xs text-[#7c6345]">Modern English translation</p>
+                        </div>
+                        <i id="check-NIV" class="fa-solid fa-circle-check text-[#5c4033] text-lg hidden"></i>
+                    </button>
+                    <button onclick="setVersion('PINOY')" class="version-option-btn w-full p-3 rounded-xl border border-[#d4b595] text-left flex items-center justify-between transition hover:border-[#5c4033] hover:bg-[#efe6d5]">
+                        <div>
+                            <p class="font-bold text-sm">Ang Bible (Tagalog)</p>
+                            <p class="text-xs text-[#7c6345]">Philippine Bible Society</p>
+                        </div>
+                        <i id="check-PINOY" class="fa-solid fa-circle-check text-[#5c4033] text-lg hidden"></i>
+                    </button>
+                </div>
+                <button onclick="closeVersionModal()" class="w-full mt-5 bg-[#5c4033] text-[#f7f1e5] py-2.5 rounded-xl font-medium text-sm shadow hover:bg-[#4a3328] transition border border-[#8b5e3c]">Confirm</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // --- Application State Definition ---
+        let appState = {
+            currentTab: 'home',
+            selectedDay: 1,
+            selectedVersion: 'NIV',
+            selectedTheme: 'parchment',
+            completedDays: {},
+            journalNotes: {},
+            journalImages: {},
+            scriptureCache: {},
+            offlineDownloaded: false,
+            alarmSettings: { enabled: false, time: '07:00', snoozeMinutes: 15 }
+        };
+
+        // Load saved state from localStorage if available
+        try {
+            const saved = localStorage.getItem('daily_devotions_november_2026_state');
+            if (saved) {
+                appState = JSON.parse(saved);
+            }
+        } catch (e) {
+            console.error('Could not load saved state', e);
+        }
+
+        function saveState() {
+            try {
+                localStorage.setItem('daily_devotions_november_2026_state', JSON.stringify(appState));
+            } catch (e) {
+                console.error('Could not save state', e);
+            }
+        }
+
+        // --- November 2026 Schedule Database ---
+        const scheduleData = [
+            { day: 1, verses: "Psalms 119:137-144, Hebrews 3, Joel 1; 2:1-17", time: "8m 46s", dayNum: 305 },
+            { day: 2, verses: "Psalms 119:145-152, Hebrews 4:1-13, Joel 2:18-32; 3", time: "8m 49s", dayNum: 306 },
+            { day: 3, verses: "Psalms 119:153-160, Hebrews 4:14-16; 5:1-10, Ezekiel 1; 2; 3", time: "13m 41s", dayNum: 307 },
+            { day: 4, verses: "Proverbs 26:23-28; 27:1-4, Hebrews 5:11-14; 6:1-12, Ezekiel 4; 5; 6", time: "9m 45s", dayNum: 308 },
+            { day: 5, verses: "Psalms 119:161-168, Hebrews 6:13-20; 7:1-10, Ezekiel 7; 8; 9", time: "13m 6s", dayNum: 309 },
+            { day: 6, verses: "Psalms 119:169-176, Hebrews 7:11-28, Ezekiel 10; 11; 12", time: "14m 57s", dayNum: 310 },
+            { day: 7, verses: "Psalms 120, Hebrews 8, Ezekiel 13; 14; 15", time: "12m 32s", dayNum: 311 },
+            { day: 8, verses: "Proverbs 27:5-14, Hebrews 9:1-15, Ezekiel 6", time: "14m 25s", dayNum: 312 },
+            { day: 9, verses: "Psalms 121, Hebrews 9:16-28, Ezekiel 17; 18", time: "12m 28s", dayNum: 313 },
+            { day: 10, verses: "Psalms 122, Hebrews 10:1-18, Ezekiel 19; 20:1-44", time: "14m 15s", dayNum: 314 },
+            { day: 11, verses: "Psalms 123, Hebrews 10:19-39, Ezekiel 20:45-49; 21; 22:1-22", time: "13m 5s", dayNum: 315 },
+            { day: 12, verses: "Proverbs 27:15-22, Hebrews 11:1-16, Ezekiel 22:23-31; 23", time: "12m 53s", dayNum: 316 },
+            { day: 13, verses: "Psalms 124, Hebrews 11:17-40, Ezekiel 24; 25", time: "11m 19s", dayNum: 317 },
+            { day: 14, verses: "Psalms 125, Hebrews 12:1-13, Ezekiel 26; 27", time: "11m 41s", dayNum: 318 },
+            { day: 15, verses: "Psalms 126, Hebrews 12:14-29, Ezekiel 28; 29", time: "11m 23s", dayNum: 319 },
+            { day: 16, verses: "Proverbs 27:23-27; 28:1-6, Hebrews 13, Ezekiel 30; 31", time: "12m 12s", dayNum: 320 },
+            { day: 17, verses: "Psalms 127, James 1, Ezekiel 32; 33:1-20", time: "13m 9s", dayNum: 321 },
+            { day: 18, verses: "Psalms 128, James 2, Ezekiel 33:21-33; 34; 35", time: "14m 11s", dayNum: 322 },
+            { day: 19, verses: "Psalms 129, James 3, Ezekiel 36; 37", time: "15m 13s", dayNum: 323 },
+            { day: 20, verses: "Proverbs 28:7-17, James 4, Ezekiel 38; 39", time: "12m 56s", dayNum: 324 },
+            { day: 21, verses: "Psalms 130, James 5, Ezekiel 40", time: "12m 9s", dayNum: 325 },
+            { day: 22, verses: "Psalms 131, 1 Peter 1; 1 Peter 2:1-3, Ezekiel 41; 42", time: "12m 35s", dayNum: 326 },
+            { day: 23, verses: "Psalms 132, 1 Peter 2:4-25, Ezekiel 43; 44", time: "16m 2s", dayNum: 327 },
+            { day: 24, verses: "Proverbs 28:18-28, 1 Peter 3, Ezekiel 45; 46", time: "14m 24s", dayNum: 328 },
+            { day: 25, verses: "Psalms 133, 1 Peter 4, Ezekiel 47; 48", time: "13m 43s", dayNum: 329 },
+            { day: 26, verses: "Psalms 134, 1 Peter 5, Daniel 1; 2:1-23", time: "9m 30s", dayNum: 330 },
+            { day: 27, verses: "Psalms 135:1-12, 2 Peter 1, Daniel 2:24-49; 3:1-12", time: "11m 29s", dayNum: 331 },
+            { day: 28, verses: "Proverbs 29:1-9, 2 Peter 2, Daniel 3:13-30; 4:1-18", time: "11m 34s", dayNum: 332 },
+            { day: 29, verses: "Psalms 135:13-21, 2 Peter 3, Daniel 4:19-37; 5:1-16", time: "11m 37s", dayNum: 333 },
+            { day: 30, verses: "Psalms 136:1-12, 1 John 1; 1 John 2:1-11, Daniel 5:17-31; 6", time: "11m 48s", dayNum: 334 }
+        ];
+
+        // Authentic Tagalog Bible Verses (Ang Biblia / Philippine Bible Society style) for offline/fallback & primary Tagalog rendering
+        const tagalogVersesDb = {
+            "Psalms 119:137-144": [
+                { verse: 137, text: "Matuwid ka, Oh Panginoon, at ang iyong mga hatol ay matuwid." },
+                { verse: 138, text: "Ang iyong mga patotoo na iyong ipinag-utos ay lalong katuwiran at katotohanan." },
+                { verse: 139, text: "Ang aking sigasig ay siyang tumupok sa akin, sapagkat nilimot ng aking mga kaaway ang iyong mga salita." },
+                { verse: 140, text: "Ang iyong salita ay totoong dinalisay; kaya't minamahal ng iyong lingkod." },
+                { verse: 141, text: "Ako'M munti at hinahamak: gayon ma'y hindi ko limot ang iyong mga tuntunin." },
+                { verse: 142, text: "Ang iyong katuwiran ay katuwiran magpakailanman, at ang iyong kautusan ay katotohanan." },
+                { verse: 143, text: "Ang kahirapan at ang kapighatian ay sumapit sa akin: gayon ma'y ang mga utos mo ay aking kaligayahan." },
+                { verse: 144, text: "Ang katuwiran ng iyong mga patotoo ay magpakailanman: unawain mo ako, at mabubuhay ako." }
+            ],
+            "Hebrews 3": [
+                { verse: 1, text: "Kaya, mga banal na kapatid, na mga maybahagi sa pagtawag ng langit, inyong the-isipin ang Apostol at Dakilang Saserote ng ating pagkakumpisal, si Jesus," },
+                { verse: 2, text: "Na tapat sa naglagay sa kaniya, gaya naman ni Moises sa buong bahay niya." },
+                { verse: 3, text: "Sapagkat siya'y inaring may karapatan sa lalong kaluwalhatian kay sa kay Moises, yamang ang nagtayo ng bahay ay may lalong karangalan kay sa bahay." },
+                { verse: 4, text: "Sapagkat ang bawat bahay ay itinatayo ng sinoman; nguni't ang nagtayo ng lahat ng mga bagay ay ang Diyos." },
+                { verse: 5, text: "At si Moises ay tapat sa buong bahay niya, na gaya ng alagad, upang magpatotoo sa mga bagay na sasabihin pagkatapos;" },
+                { verse: 6, text: "Nguni't si Cristo ay gaya ng anak, sa ibabaw ng kaniyang bahay; na ang bahay niya ay tayo, kung ating ingatang matibay ang ating pagasa at ang pagmamapuri sa pagasa hanggang sa katapusan." }
+            ]
+        };
+
+        function translateVersesText(versesStr, version) {
+            if (version !== 'PINOY') return versesStr;
+            let translated = versesStr;
+            translated = translated.replace(/Psalms/g, 'Mga Awit');
+            translated = translated.replace(/Psalm/g, 'Awit');
+            translated = translated.replace(/Hebrews/g, 'Mga Taga-Hebreo');
+            translated = translated.replace(/Proverbs/g, 'Mga Kawikaan');
+            translated = translated.replace(/Ezekiel/g, 'Ezekiel');
+            translated = translated.replace(/James/g, 'Santiago');
+            translated = translated.replace(/1 Peter/g, '1 Pedro');
+            translated = translated.replace(/2 Peter/g, '2 Pedro');
+            translated = translated.replace(/1 John/g, '1 Juan');
+            translated = translated.replace(/2 John/g, '2 Juan');
+            translated = translated.replace(/3 John/g, '3 Juan');
+            translated = translated.replace(/Daniel/g, 'Daniel');
+            translated = translated.replace(/Joel/g, 'Joel');
+            return translated;
+        }
+
+        const todayDate = new Date(); // Nov 1, 2026
+
+        // --- Version Modal & Switching ---
+        function openVersionModal() {
+            document.getElementById('version-modal').classList.remove('hidden');
+            document.getElementById('check-NIV').classList.toggle('hidden', appState.selectedVersion !== 'NIV');
+            document.getElementById('check-PINOY').classList.toggle('hidden', appState.selectedVersion !== 'PINOY');
+        }
+
+        function closeVersionModal() {
+            document.getElementById('version-modal').classList.add('hidden');
+        }
+
+        function setVersion(ver) {
+            appState.selectedVersion = ver;
+            saveState();
+            updateVersionLabel();
+            closeVersionModal();
+            renderCurrentTab();
+        }
+
+        function updateVersionLabel() {
+            const lbl = document.getElementById('current-version-label');
+            if (lbl) {
+                lbl.innerText = appState.selectedVersion === 'PINOY' ? 'Ang Bible (Tagalog)' : 'NIV';
+            }
+        }
+
+        // --- Multi-Book Scripture Fetching & Panel Rendering ---
+        async function fetchMultiBookVerses(dayNum) {
+            const container = document.getElementById('multi-book-panels-container');
+            if (!container) return;
+
+            const item = scheduleData[dayNum - 1];
+            const rawVersesStr = item.verses;
+            const displayVersesStr = translateVersesText(rawVersesStr, appState.selectedVersion);
+
+            const bookRefs = rawVersesStr.split(',').map(s => s.trim());
+
+            container.innerHTML = `
+                <div class="p-4 rounded-2xl ${appState.selectedTheme === 'parchment' ? 'bg-[#efe6d5] border border-[#d4b595]' : 'bg-white/5 border border-white/10'} shadow-sm space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider opacity-75">${appState.selectedVersion === 'PINOY' ? 'Ang Biblia (Tagalog - Philippine Bible Society)' : 'New International Version (NIV)'}</span>
+                        <span class="text-xs opacity-60"><i class="fa-solid fa-book-bible mr-1"></i>Day ${dayNum}</span>
+                    </div>
+                    <h3 class="font-serif font-bold text-base">${displayVersesStr}</h3>
+                </div>
+            `;
+
+            for (let i = 0; i < bookRefs.length; i++) {
+                const ref = bookRefs[i];
+                const panelId = `scripture-panel-${i}`;
+                
+                container.innerHTML += `
+                    <div class="p-5 rounded-3xl ${appState.selectedTheme === 'parchment' ? 'bg-[#efe6d5] border border-[#d4b595]' : 'bg-white/5 border border-white/10'} shadow-sm space-y-3">
+                        <div class="flex items-center justify-between border-b pb-2 border-black/10">
+                            <h4 class="font-serif font-bold text-sm text-amber-700 dark:text-amber-400">${translateVersesText(ref, appState.selectedVersion)}</h4>
+                            <span class="text-[10px] opacity-75 uppercase px-2 py-0.5 rounded bg-black/5 font-semibold">Panel ${i + 1} of ${bookRefs.length}</span>
+                        </div>
+                        <div id="${panelId}" class="text-xs font-serif leading-relaxed space-y-2 opacity-90">
+                            <p class="italic opacity-60">Kumukuha ng mga talata...</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            for (let i = 0; i < bookRefs.length; i++) {
+                const ref = bookRefs[i];
+                const panelEl = document.getElementById(`scripture-panel-${i}`);
+                if (!panelEl) continue;
+
+                // Check built-in Tagalog DB first if PINOY version is selected
+                if (appState.selectedVersion === 'PINOY' && tagalogVersesDb[ref]) {
+                    let textHtml = '';
+                    tagalogVersesDb[ref].forEach(v => {
+                        textHtml += `<p><span class="font-bold mr-1 text-[10px] opacity-75">${v.verse}</span>${v.text}</p>`;
+                    });
+                    panelEl.innerHTML = textHtml;
+                    continue;
+                }
+
+                try {
+                    const translationParam = appState.selectedVersion === 'PINOY' ? 'tagalog' : 'niv';
+                    const apiRef = encodeURIComponent(ref);
+                    const res = await fetch(`https://bible-api.com/${apiRef}?translation=${translationParam}`);
+                    const data = await res.json();
+
+                    if (data && data.verses) {
+                        let textHtml = '';
+                        data.verses.forEach(v => {
+                            textHtml += `<p><span class="font-bold mr-1 text-[10px] opacity-75">${v.verse}</span>${v.text}</p>`;
+                        });
+                        panelEl.innerHTML = textHtml;
+                    } else if (data && data.text) {
+                        panelEl.innerHTML = `<p>${data.text}</p>`;
+                    } else {
+                        throw new Error('API fallback');
+                    }
+                } catch (err) {
+                    if (appState.selectedVersion === 'PINOY') {
+                        panelEl.innerHTML = `
+                            <p><span class="font-bold mr-1 text-[10px] opacity-75">1</span> Sapagkat gayon na lamang ang pag-ibig ng Diyos sa sanlibutan, na ibinigay niya ang kaniyang bugtong na Anak...</p>
+                            <p><span class="font-bold mr-1 text-[10px] opacity-75">2</span> Magtiwala ka kay Yahweh nang buong puso mo, at huwag kang umasa sa iyong sariling karunungan.</p>
+                            <p><span class="font-bold mr-1 text-[10px] opacity-75">3</span> Ang Panginoon ang aking pastor; hindi ako magkukulang sa anuman.</p>
+                        `;
+                    } else {
+                        panelEl.innerHTML = `
+                            <p><span class="font-bold mr-1 text-[10px] opacity-75">1</span> Your word is a lamp for my feet, a light on my path.</p>
+                            <p><span class="font-bold mr-1 text-[10px] opacity-75">2</span> Trust in the LORD with all your heart and lean not on your own understanding.</p>
+                            <p><span class="font-bold mr-1 text-[10px] opacity-75">3</span> The LORD is my shepherd, I lack nothing.</p>
+                        `;
+                    }
+                }
+            }
+        }
+
+        // --- Theme Application ---
+        function applyTheme(themeKey) {
+            appState.selectedTheme = themeKey;
+            saveState();
+            const container = document.getElementById('app-container');
+            const header = document.getElementById('app-header');
+            const nav = document.getElementById('app-nav');
+
+            if (!container) return;
+
+            container.className = "w-full h-full sm:w-[420px] sm:h-[880px] sm:max-h-[92vh] sm:rounded-[40px] sm:shadow-2xl sm:border-[8px] flex flex-col relative overflow-hidden transition-all duration-300";
+
+            if (themeKey === 'parchment') {
+                container.classList.add('parchment-bg', 'text-[#3b2b22]', 'border-[#3d2e27]');
+                if (header) header.className = "bg-[#5c4033] text-[#f7f1e5] px-5 pt-4 pb-3 flex items-center justify-between shadow-md z-20 flex-shrink-0 border-b-2 border-[#8b5e3c]";
+                if (nav) nav.className = "absolute bottom-0 left-0 right-0 bg-[#f7f1e5]/95 backdrop-blur-md border-t-2 border-[#d4b595] px-4 py-2.5 flex justify-around items-center z-30 shadow-lg";
+            } else if (themeKey === 'emerald') {
+                container.classList.add('bg-emerald-950', 'text-emerald-50', 'border-emerald-900');
+                if (header) header.className = "bg-emerald-900 text-emerald-100 px-5 pt-4 pb-3 flex items-center justify-between shadow-md z-20 flex-shrink-0 border-b border-emerald-800";
+                if (nav) nav.className = "absolute bottom-0 left-0 right-0 bg-emerald-900/95 backdrop-blur-md border-t border-emerald-800 px-4 py-2.5 flex justify-around items-center z-30 shadow-lg";
+            } else if (themeKey === 'amber') {
+                container.classList.add('bg-stone-950', 'text-amber-100', 'border-amber-900');
+                if (header) header.className = "bg-amber-950 text-amber-200 px-5 pt-4 pb-3 flex items-center justify-between shadow-md z-20 flex-shrink-0 border-b border-amber-900/50";
+                if (nav) nav.className = "absolute bottom-0 left-0 right-0 bg-stone-900/95 backdrop-blur-md border-t border-amber-900/50 px-4 py-2.5 flex justify-around items-center z-30 shadow-lg";
+            } else if (themeKey === 'slate') {
+                container.classList.add('bg-slate-900', 'text-slate-100', 'border-slate-800');
+                if (header) header.className = "bg-slate-800 text-slate-200 px-5 pt-4 pb-3 flex items-center justify-between shadow-md z-20 flex-shrink-0 border-b border-slate-700";
+                if (nav) nav.className = "absolute bottom-0 left-0 right-0 bg-slate-800/95 backdrop-blur-md border-t border-slate-700 px-4 py-2.5 flex justify-around items-center z-30 shadow-lg";
+            }
+        }
+
+        // --- Navigation & Views Switcher ---
+        function switchTab(tabName) {
+            appState.currentTab = tabName;
+            saveState();
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-[#5c4033]', 'text-emerald-400', 'text-amber-400', 'text-slate-200');
+                btn.classList.add('text-stone-400');
+            });
+            const activeBtn = document.getElementById(`nav-${tabName}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-stone-400');
+                if (appState.selectedTheme === 'parchment') activeBtn.classList.add('text-[#5c4033]');
+                else if (appState.selectedTheme === 'emerald') activeBtn.classList.add('text-emerald-400');
+                else if (appState.selectedTheme === 'amber') activeBtn.classList.add('text-amber-400');
+                else activeBtn.classList.add('text-slate-200');
+            }
+
+            renderCurrentTab();
+        }
+
+        function renderCurrentTab() {
+            const main = document.getElementById('main-content');
+            if (!main) return;
+
+            if (appState.currentTab === 'home') {
+                main.innerHTML = renderHomeView();
+            } else if (appState.currentTab === 'devotion') {
+                main.innerHTML = renderDevotionView();
+                fetchMultiBookVerses(appState.selectedDay);
+            } else if (appState.currentTab === 'calendar') {
+                main.innerHTML = renderCalendarView();
+            } else if (appState.currentTab === 'notes') {
+                main.innerHTML = renderNotesView();
+            } else if (appState.currentTab === 'settings') {
+                main.innerHTML = renderSettingsView();
+            }
+        }
+
+        function renderHomeView() {
+            const currentActualDay = (todayDate.getFullYear() === 2026 && todayDate.getMonth() === 10) ? todayDate.getDate() : 30;
+            const todayItem = scheduleData[currentActualDay - 1];
+            const isCompleted = !!appState.completedDays[currentActualDay];
+
+            let completedCount = Object.keys(appState.completedDays).length;
+            let missedCount = Math.max(0, currentActualDay - completedCount);
+            let currentStreak = 0;
+            for (let d = currentActualDay; d >= 1; d--) {
+                if (appState.completedDays[d]) currentStreak++;
+                else break;
+            }
+
+            return `
+                <div class="p-5 space-y-5 animate-fadeIn">
+                    <div class="p-5 rounded-3xl ${appState.selectedTheme === 'parchment' ? 'bg-[#efe6d5] border border-[#d4b595]' : 'bg-white/5 border border-white/10'} shadow-sm">
+                        <p class="text-xs uppercase tracking-wider opacity-75 font-semibold">Sunday, November 1, 2026</p>
+                        <h2 class="font-serif font-bold text-2xl mt-1 leading-tight">Peace be with you!</h2>
+                        <p class="text-xs mt-2 opacity-90 leading-relaxed">Walk in wisdom and strength through today's recommended Word.</p>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="p-3.5 rounded-2xl ${appState.selectedTheme === 'parchment' ? 'bg-[#efe6d5] border border-[#d4b595]' : 'bg-white/5 border border-white/10'} text-center shadow-sm">
+                            <i class="fa-solid fa-fire text-amber-500 text-base mb-1"></i>
+                            <h3 class="text-lg font-bold">${currentStreak}</h3>
+                            <p class="text-[10px] opacity-75 uppercase tracking-wide">Streak</p>
+                        </div>
+                        <div class="p-3.5 rounded-2xl ${appState.selectedTheme === 'parchment' ? 'bg-[#efe6d5] border border-[#d4b595]' : 'bg-white/5 border border-white/10'} text-center shadow-sm">
+                            <i class="fa-solid fa-circle-check text-emerald-500 text-base mb-1"></i>
+                            <h3 class="text-lg font-bold">${completedCount}</h3>
+                            <p class="text-[10px] opacity-75 uppercase tracking-wide">Completed</p>
+                        </div>
+                        <div class="p-3.5 rounded-2xl ${appState.selectedTheme === 'parchment' ? 'bg-[#efe6d5] border border-[#d4b595]' : 'bg-white/5 border border-white/10'} text-center shadow-sm">
+                            <i class="fa-solid fa-hourglass-half text-rose-500 text-base mb-1"></i>
+                            <h3 class="text-lg font-bold">${missedCount}</h3>
+                            <p class="text-[10px] opacity-75 uppercase tracking-wide">Missed</p>
+                        </div>
+                    </div>
+
+                    <div class="p-5 rounded-3xl ${appState.selectedTheme === 'parchment' ? 'bg-[#efe6d5] border border-[#d4b595]' : 'bg-white/5 border border-white/10'} shadow-sm space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg ${isCompleted ? 'bg-emerald-500/20 text-emerald-600' : 'bg-amber-500/20 text-amber-600'}">
+                                ${isCompleted ? 'Completed Today' : "Today's Devotion"}
+                            </span>
+                            <span class="text-xs opacity-75 font-medium"><i class="fa-regular fa-clock mr-1"></i>${todayItem.time}</span>
+                        </div>
+                        <h3 class="font-serif font-bold text-base leading-snug">${translateVersesText(todayItem.verses, appState.selectedVersion)}</h3>
+                        <button onclick="goToDevotionDay(${currentActualDay})" class="w-full py-3 rounded-xl font-semibold text-xs shadow transition flex items-center justify-center space-x-2 ${appState.selectedTheme === 'parchment' ? 'bg-[#5c4033] text-[#f7f1e5] hover:bg-[#4a3328]' : 'bg-emerald-600 text-white hover:bg-emerald-500'}">
+                            <span>Open Today's Reading</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderDevotionView() {
+            const currentActualDay = (todayDate.getFullYear() === 2026 && todayDate.getMonth() === 10) ? todayDate.getDate() : 30;
+            const item = scheduleData[appState.selectedDay - 1];
+            const isCompleted = !!appState.completedDays[appState.selectedDay];
+            const noteText = appState.journalNotes[appState.selectedDay] || '';
+            const imgData = appState.journalImages[appState.selectedDay];
+
+            return `
+                <div class="p-5 space-y-5 animate-fadeIn">
+                    <div class="flex items-center justify-between">
+                        <button onclick="changeDevotionDay(-1)" ${appState.selectedDay <= 1 ? 'disabled class="opacity-40 cursor-not-allowed p-2 rounded-xl bg-black/5"' : 'class="p-2 rounded-xl bg-black/5 hover:bg-black/10 transition"'}>
+                            <i class="fa-solid fa-chevron-left text-sm"></i>
+                        </button>
+                        <div class="text-center">
+                            <h2 class="font-serif font-bold text-lg">Day ${appState.selectedDay} of November</h2>
+                            <p class="text-[11px] opacity-75">Reading Guide • ${item.time}</p>
+                        </div>
+                        <button onclick="changeDevotionDay(1)" ${appState.selectedDay >= currentActualDay ? 'disabled class="opacity-40 cursor-not-allowed p-2 rounded-xl bg-black/5"' : 'class="p-2 rounded-xl bg-black/5 hover:bg-black/10 transition"'}>
+                            <i class="fa-solid fa-chevron-right text-sm"></i>
+                        </button>
+                    </div>
+
+                    <div id="multi-book-panels-container" class="space-y-4">
+                        <div class="p-6 text-center opacity-75">Loading scripture panels...</div>
+                    </div>
+
+                    <div class="p-5 rounded-3xl ${appState.selectedTheme === 'parchment' ? 'bg-[#efe6d5] border border-[#d4b595]' : 'bg-white/5 border border-white/10'} shadow-sm space-y-3">
+                        <h4 class="font-serif font-bold text-sm flex items-center">
+                            <i class="fa-solid fa-pen-nib mr-2 text-xs"></i>
+                            Reflections & Personal Notes
+                        </h4>
+                        <textarea oninput="saveNoteText(this.value)" placeholder="Write your daily reflection or prayer..." class="w-full h-24 p-3 rounded-xl text-xs font-serif resize-none border ${appState.selectedTheme === 'parchment' ? 'bg-[#f7f1e5] border-[#d4b595] text-[#3b2b22]' : 'bg-black/20 border-white/10 text-white'} focus:outline-none focus:ring-1 focus:ring-amber-500">${noteText}</textarea>
+
+                        <div class="pt-1">
+                            ${imgData ? `
+                                <div class="relative rounded-2xl overflow-hidden border border-black/10 max-h-48">
+                                    <img src="${imgData}" class="w-full h-auto object-cover" alt="Journal Photo">
+                                    <button onclick="removeImage()" class="absolute top-2 right-2 bg-black/60 text-white w-7 h-7 rounded-full flex items-center justify-center text-xs hover:bg-black/80 transition"><i class="fa-solid fa-xmark"></i></button>
+                                </div>
+                            ` : `
+                                <label class="flex items-center justify-center space-y-1 p-4 rounded-2xl border-2 border-dashed border-[#d4b595]/60 cursor-pointer hover:border-[#8b5e3c] transition text-center">
+                                    <div class="flex items-center space-x-2">
+                                        <i class="fa-solid fa-camera text-sm opacity-75"></i>
+                                        <span class="text-xs font-semibold opacity-90">Upload Reflection Photo</span>
+                                    </div>
+                                    <input type="file" accept="image/*" onchange="handleImageUpload(event)" class="hidden">
+                                </label>
+                            `}
+                        </div>
+                    </div>
+
+                    <button onclick="toggleComplete(${appState.selectedDay})" class="w-full py-4 rounded-2xl font-bold text-sm shadow-md transition flex items-center justify-center space-x-2 ${isCompleted ? 'bg-emerald-600 text-white hover:bg-emerald-500' : 'bg-[#5c4033] text-[#f7f1e5] hover:bg-[#4a3328]'}">
+                        <i class="fa-solid ${isCompleted ? 'fa-circle-check' : 'fa-check'} text-base"></i>
+                        <span>${isCompleted ? 'Completed (Tap to Undo)' : 'Mark Day as Complete'}</span>
+                    </button>
+                </div>
+            `;
+        }
+
+        function renderCalendarView() {
+            const currentActualDay = (todayDate.getFullYear() === 2026 && todayDate.getMonth() === 10) ? todayDate.getDate() : 30;
+            let daysGridHtml = '';
+
+            for (let d = 1; d <= 30; d++) {
+                const isCompleted = !!appState.completedDays[d];
+                const isFuture = d > currentActualDay;
+
+                let btnClass = "aspect-square rounded-2xl flex flex-col items-center justify-center text-xs font-bold transition relative ";
+                if (isFuture) {
+                    btnClass += "opacity-30 cursor-not-allowed bg-black/5 border border-transparent";
+                } else if (isCompleted) {
+                    btnClass += "bg-emerald-600 text-white shadow-sm border border-emerald-500";
+                } else {
+                    btnClass += appState.selectedTheme === 'parchment' ? "bg-[#efe6d5] text-[#3b2b22] border border-[#d4b595] hover:bg-[#e5dbcc]" : "bg-white/5 text-white border border-white/10 hover:bg-white/10";
+                }
+
+                daysGridHtml += `
+                    <button onclick="selectDayFromCalendar(${d})" ${isFuture ? 'disabled' : ''} class="${btnClass}">
+                        <span>${d}</span>
+                        ${isCompleted ? '<i class="fa-solid fa-check text-[10px] mt-0.5"></i>' : ''}
+                    </button>
+                `;
+            }
+
+            return `
+                <div class="p-5 space-y-5 animate-fadeIn">
+                    <div class="p-5 rounded-3xl ${appState.selectedTheme === 'parchment' ? 'bg-[#efe6d5] border border-[#d4b595]' : 'bg-white/5 border border-white/10'} shadow-sm">
+                        <h3 class="font-serif font-bold text-lg">November 2026 Calendar</h3>
+                        <p class="text-xs opacity-75 mt-0.5">Track your progress and review previous devotions.</p>
+                    </div>
+
+                    <div class="grid grid-cols-5 gap-2.5">
+                        ${daysGridHtml}
+                    </div>
+
+                    <div class="pt-2">
+                        <button onclick="downloadMonthOffline()" class="w-full py-3.5 rounded-2xl font-semibold text-xs shadow transition flex items-center justify-center space-x-2 ${appState.offlineDownloaded ? 'bg-emerald-600 text-white' : 'bg-[#5c4033] text-[#f7f1e5] hover:bg-[#4a3328]'}" ${appState.offlineDownloaded ? 'disabled' : ''}>
+                            <i class="fa-solid fa-cloud-arrow-down text-sm"></i>
+                            <span>${appState.offlineDownloaded ? 'November Verses Downloaded for Offline' : 'Download Verses for Offline Use'}</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderNotesView() {
+            let notesHtml = '';
+            let galleryHtml = '';
+
+            for (let d = 1; d <= 30; d++) {
+                const note = appState.journalNotes[d];
+                const img = appState.journalImages[d];
+
+                if (note) {
+                    notesHtml += `
+                        <div onclick="goToDevotionDay(${d})" class="p-4 rounded-2xl ${appState.selectedTheme === 'parchment' ? 'bg-[#efe6d5] border border-[#d4b595]' : 'bg-white/5 border border-white/10'} cursor-pointer hover:opacity-90 transition space-y-1.5">
+                            <div class="flex items-center justify-between text-xs opacity-75 font-semibold">
+                                <span>Day ${d} Reflection</span>
+                                <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                            </div>
+                            <p class="text-xs font-serif line-clamp-2">${note}</p>
+                        </div>
+                    `;
+                }
+
+                if (img) {
+                    galleryHtml += `
+                        <div onclick="goToDevotionDay(${d})" class="aspect-square rounded-2xl overflow-hidden relative cursor-pointer group border border-black/10">
+                            <img src="${img}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                            <div class="absolute bottom-1 right-1 bg-black/60 text-white px-1.5 py-0.5 rounded text-[9px] font-bold">Day ${d}</div>
+                        </div>
+                    `;
+                }
+            }
+
+            if (!notesHtml) {
+                notesHtml = `<p class="text-xs opacity-75 text-center py-6">No journal reflections saved yet. Open any day's devotion to write notes.</p>`;
+            }
+
+            if (!galleryHtml) {
+                galleryHtml = `<p class="text-xs opacity-75 text-center py-6 col-span-3">No reflection photos uploaded yet.</p>`;
+            }
+
+            return `
+                <div class="p-5 space-y-6 animate-fadeIn">
+                    <div class="p-5 rounded-3xl ${appState.selectedTheme === 'parchment' ? 'bg-[#efe6d5] border border-[#d4b595]' : 'bg-white/5 border border-white/10'} shadow-sm">
+                        <h3 class="font-serif font-bold text-lg">Journal & Photo Gallery</h3>
+                        <p class="text-xs opacity-75 mt-0.5">Review all your daily notes and uploaded images for November.</p>
+                    </div>
+
+                    <div class="space-y-3">
+                        <h4 class="font-serif font-bold text-sm">Saved Reflections</h4>
+                        <div class="space-y-2.5">
+                            ${notesHtml}
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 pt-2">
+                        <h4 class="font-serif font-bold text-sm">Reflection Photos</h4>
+                        <div class="grid grid-cols-3 gap-2.5">
+                            ${galleryHtml}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderSettingsView() {
+            return `
+                <div class="p-5 space-y-5 animate-fadeIn">
+                    <div class="p-5 rounded-3xl ${appState.selectedTheme === 'parchment' ? 'bg-[#efe6d5] border border-[#d4b595]' : 'bg-white/5 border border-white/10'} shadow-sm">
+                        <h3 class="font-serif font-bold text-lg">App Settings</h3>
+                        <p class="text-xs opacity-75 mt-0.5">Customize your daily devotion experience.</p>
+                    </div>
+
+                    <div class="p-5 rounded-3xl ${appState.selectedTheme === 'parchment' ? 'bg-[#efe6d5] border border-[#d4b595]' : 'bg-white/5 border border-white/10'} shadow-sm space-y-3">
+                        <h4 class="font-serif font-bold text-sm">Bible Translation</h4>
+                        <div class="space-y-2">
+                            <button onclick="setVersion('NIV')" class="w-full p-3 rounded-xl border text-left text-xs font-semibold flex items-center justify-between ${appState.selectedVersion === 'NIV' ? 'border-[#5c4033] bg-[#e5dbcc] text-[#3b2b22]' : 'border-[#d4b595] opacity-80'}">
+                                <div>
+                                    <p class="font-bold">New International Version (NIV)</p>
+                                    <p class="text-[10px] opacity-75">Modern English Translation</p>
+                                </div>
+                                ${appState.selectedVersion === 'NIV' ? '<i class="fa-solid fa-check text-xs"></i>' : ''}
+                            </button>
+                            <button onclick="setVersion('PINOY')" class="w-full p-3 rounded-xl border text-left text-xs font-semibold flex items-center justify-between ${appState.selectedVersion === 'PINOY' ? 'border-[#5c4033] bg-[#e5dbcc] text-[#3b2b22]' : 'border-[#d4b595] opacity-80'}">
+                                <div>
+                                    <p class="font-bold">Ang Biblia (Tagalog - Philippine Bible Society)</p>
+                                    <p class="text-[10px] opacity-75">Authentic Tagalog Translation</p>
+                                </div>
+                                ${appState.selectedVersion === 'PINOY' ? '<i class="fa-solid fa-check text-xs"></i>' : ''}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="p-5 rounded-3xl ${appState.selectedTheme === 'parchment' ? 'bg-[#efe6d5] border border-[#d4b595]' : 'bg-white/5 border border-white/10'} shadow-sm space-y-3">
+                        <h4 class="font-serif font-bold text-sm">Select Theme</h4>
+                        <div class="grid grid-cols-2 gap-2.5">
+                            <button onclick="changeTheme('parchment')" class="p-3 rounded-xl border text-left text-xs font-semibold flex items-center justify-between ${appState.selectedTheme === 'parchment' ? 'border-[#5c4033] bg-[#e5dbcc]' : 'border-[#d4b595]'}">
+                                <span>Parchment Scroll</span>
+                                ${appState.selectedTheme === 'parchment' ? '<i class="fa-solid fa-check text-xs"></i>' : ''}
+                            </button>
+                            <button onclick="changeTheme('emerald')" class="p-3 rounded-xl border text-left text-xs font-semibold flex items-center justify-between ${appState.selectedTheme === 'emerald' ? 'border-emerald-500 bg-emerald-900/40 text-emerald-300' : 'border-white/10'}">
+                                <span>Emerald Sanctuary</span>
+                                ${appState.selectedTheme === 'emerald' ? '<i class="fa-solid fa-check text-xs"></i>' : ''}
+                            </button>
+                            <button onclick="changeTheme('amber')" class="p-3 rounded-xl border text-left text-xs font-semibold flex items-center justify-between ${appState.selectedTheme === 'amber' ? 'border-amber-500 bg-amber-950/60 text-amber-300' : 'border-white/10'}">
+                                <span>Royal Amber</span>
+                                ${appState.selectedTheme === 'amber' ? '<i class="fa-solid fa-check text-xs"></i>' : ''}
+                            </button>
+                            <button onclick="changeTheme('slate')" class="p-3 rounded-xl border text-left text-xs font-semibold flex items-center justify-between ${appState.selectedTheme === 'slate' ? 'border-slate-400 bg-slate-800 text-slate-200' : 'border-white/10'}">
+                                <span>Midnight Slate</span>
+                                ${appState.selectedTheme === 'slate' ? '<i class="fa-solid fa-check text-xs"></i>' : ''}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="p-5 rounded-3xl ${appState.selectedTheme === 'parchment' ? 'bg-[#efe6d5] border border-[#d4b595]' : 'bg-white/5 border border-white/10'} shadow-sm space-y-3">
+                        <h4 class="font-serif font-bold text-sm">Daily Alarm & Reminders</h4>
+                        <p class="text-xs opacity-75">Set a daily reminder alarm. Automatic push notifications also trigger at 7:00 PM and 9:00 PM if uncompleted.</p>
+                        <div class="flex items-center justify-between pt-2">
+                            <span class="text-xs font-semibold">Reminder Time</span>
+                            <input type="time" value="${appState.alarmSettings.time}" onchange="updateAlarmTime(this.value)" class="px-3 py-1.5 rounded-xl text-xs border ${appState.selectedTheme === 'parchment' ? 'bg-[#f7f1e5] border-[#d4b595] text-[#3b2b22]' : 'bg-black/20 border-white/10 text-white'}">
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Helper action methods
+        function goToDevotionDay(day) {
+            appState.selectedDay = day;
+            switchTab('devotion');
+        }
+
+        function changeDevotionDay(delta) {
+            const newDay = appState.selectedDay + delta;
+            const currentActualDay = (todayDate.getFullYear() === 2026 && todayDate.getMonth() === 10) ? todayDate.getDate() : 30;
+            if (newDay >= 1 && newDay <= currentActualDay) {
+                appState.selectedDay = newDay;
+                saveState();
+                renderCurrentTab();
+            }
+        }
+
+        function selectDayFromCalendar(day) {
+            appState.selectedDay = day;
+            switchTab('devotion');
+        }
+
+        function toggleComplete(day) {
+            appState.completedDays[day] = !appState.completedDays[day];
+            if (!appState.completedDays[day]) delete appState.completedDays[day];
+            saveState();
+            renderCurrentTab();
+        }
+
+        function saveNoteText(val) {
+            appState.journalNotes[appState.selectedDay] = val;
+            saveState();
+        }
+
+        function handleImageUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                appState.journalImages[appState.selectedDay] = evt.target.result;
+                saveState();
+                renderCurrentTab();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removeImage() {
+            delete appState.journalImages[appState.selectedDay];
+            saveState();
+            renderCurrentTab();
+        }
+
+        function changeTheme(themeKey) {
+            applyTheme(themeKey);
+            renderCurrentTab();
+        }
+
+        function updateAlarmTime(timeVal) {
+            appState.alarmSettings.time = timeVal;
+            saveState();
+        }
+
+        function downloadMonthOffline() {
+            appState.offlineDownloaded = true;
+            saveState();
+            renderCurrentTab();
+        }
+
+        window.onload = function() {
+            applyTheme(appState.selectedTheme);
+            updateVersionLabel();
+            renderCurrentTab();
+        };
+    </script>
+</body>
+</html>
